@@ -1,0 +1,10 @@
+name: assignment
+title:
+username:
+account: gfranc
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 251639
+bundleId: 1150899
+url: https://gfranc.shinyapps.io/assignment/
+when: 1514287769.87366
