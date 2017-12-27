@@ -1,0 +1,85 @@
+---
+title: "sample4"
+author: "Gracy"
+date: "27 December 2017"
+output: ioslides_presentation
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Shiny Presentation
+
+This R Markdown presentation is made interactive using Shiny. The viewers of the presentation can change the assumptions underlying what's presented and see the results immediately. 
+
+To learn more, see [Interactive Documents](http://rmarkdown.rstudio.com/authoring_shiny.html).
+
+## Interactive Plot1
+
+```{r plot1}
+inputPanel(
+  
+  sliderInput("count", label = "Count of Random Numbers:",min = 0, max = 500, value = 1, step = 1)
+  
+  
+)
+
+renderPlot({
+  
+                # generate bins based on input$bins from ui.R
+                #bins <- seq(min(x), max(x), length.out = input$bins + 1)
+                set.seed(0)
+                randomNumCount <- input$count
+                distribution <- rexp(randomNumCount,0.2)
+                # draw the histogram with the specified number of bins
+                h <- hist(distribution, breaks = 30,  col = 'darkgray', border = 'white')
+                xfit<-seq(min(distribution),max(distribution),length=length(distribution)) 
+                yfit<-dnorm(xfit,mean=mean(distribution),sd=sd(distribution)) 
+                yfit <- yfit*diff(h$mids[1:2])*length(distribution) 
+                lines(xfit, yfit, col="blue", lwd=2)
+                
+                
+                
+                
+                
+        
+})
+```
+
+## Interactive Plot2
+
+```{r plot2}
+inputPanel(
+  
+  sliderInput("count", label = "Count of Random Numbers:",min = 0, max = 500, value = 1, step = 1),
+  sliderInput("simulate", "Number of Simulations to generate:", min = 500, max = 5000, value = 500)
+  
+)
+
+renderPlot({
+        set.seed(0)
+        randomNumCount <- input$count
+        distribution <- rexp(randomNumCount,0.2)
+        
+        simulation <- input$simulate
+        resample <- matrix(sample(distribution, randomNumCount * simulation, replace=TRUE), simulation , randomNumCount)
+        # apply mean funtion on the simulated matrix data
+        resamplemean <- apply(resample,1,mean)
+                
+        df <- data.frame(x = resamplemean)
+                
+        h1 <- hist(df$x, breaks=30, col = 'magenta' , border = 'black')
+        xfit<-seq(min(df$x),max(df$x),length=length(df$x)) 
+        yfit<-dnorm(xfit,mean=mean(df$x),sd=sd(df$x)) 
+        yfit <- yfit*diff(h1$mids[1:2])*length(df$x) 
+        lines(xfit, yfit, col="blue", lwd=2)
+        
+})
+```
+
+
+
+
+
